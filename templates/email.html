@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>{{ subject }}</title>
+<style>
+  body { font-family: -apple-system, "PingFang SC", "Segoe UI", sans-serif; color:#222; max-width: 760px; margin: 0 auto; padding: 16px; }
+  h1 { font-size: 20px; border-bottom: 2px solid #333; padding-bottom: 6px; }
+  h2 { font-size: 16px; margin-top: 28px; color:#0366d6; border-left: 4px solid #0366d6; padding-left: 8px; }
+  .item { margin: 10px 0 16px; padding-bottom: 10px; border-bottom: 1px dashed #ddd; }
+  .title a { color:#111; text-decoration: none; font-weight: 600; font-size: 15px; }
+  .title a:hover { text-decoration: underline; }
+  .meta { color:#888; font-size: 12px; margin-top: 2px; }
+  .summary { color:#333; font-size: 13px; margin-top: 4px; line-height: 1.55; }
+  .topics span { display:inline-block; background:#eef; color:#335; font-size:11px; padding:1px 6px; border-radius:8px; margin-right:4px; }
+  .footer { color:#aaa; font-size: 11px; margin-top: 24px; text-align:center; }
+</style>
+</head>
+<body>
+<h1>{{ subject }}</h1>
+<p style="color:#666;font-size:13px;">共 {{ total }} 条，覆盖 {{ groups|length }} 个信息源。生成于 {{ generated_at }}。</p>
+{% for src_label, items in groups.items() %}
+<h2>{{ src_label }} <span style="color:#888;font-weight:normal;font-size:13px;">({{ items|length }})</span></h2>
+{% for it in items %}
+<div class="item">
+  <div class="title"><a href="{{ it.url }}">{{ it.title }}</a></div>
+  <div class="meta">
+    score {{ '%.0f' % it.score }}
+    {% if it.extra.stars %} · ★{{ it.extra.stars }}{% endif %}
+    {% if it.extra.stars_period %} · {{ it.extra.stars_period }}{% endif %}
+    {% if it.extra.points %} · {{ it.extra.points }} points · {{ it.extra.comments }} comments{% endif %}
+    {% if it.extra.language %} · {{ it.extra.language }}{% endif %}
+    {% if it.extra.category %} · {{ it.extra.category }}{% endif %}
+    {% if it.extra.authors %} · {{ it.extra.authors }}{% endif %}
+  </div>
+  {% if it.matched_topics %}
+  <div class="topics" style="margin-top:4px;">
+    {% for t in it.matched_topics %}<span>{{ t }}</span>{% endfor %}
+  </div>
+  {% endif %}
+  {% if it.zh_summary %}<div class="summary">{{ it.zh_summary }}</div>{% endif %}
+</div>
+{% endfor %}
+{% endfor %}
+<div class="footer">由 Explorer Agent 自动生成 · DeepSeek 摘要</div>
+</body>
+</html>

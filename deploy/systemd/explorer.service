@@ -1,0 +1,16 @@
+[Unit]
+Description=Explorer daily research feed
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+# 修改成你部署的真实路径与运行用户
+WorkingDirectory=/opt/explorer
+ExecStart=/bin/sh -c '/opt/explorer/.venv/bin/python -m src.main >> /opt/explorer/logs/explorer.out.log 2>> /opt/explorer/logs/explorer.err.log'
+User=explorer
+Group=explorer
+# .env 已经被代码用 python-dotenv 加载了；这里再写一份只是为了让 systemd 也能看到 HTTPS_PROXY 之类
+EnvironmentFile=-/opt/explorer/.env
+# 失败不重试，等下一个 timer 周期
+Restart=no

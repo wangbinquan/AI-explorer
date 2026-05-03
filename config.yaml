@@ -1,0 +1,116 @@
+# 订阅话题：name 用于邮件分类标签，keywords 给 LLM 做相关性判断的辅助信号
+topics:
+  - name: AI
+    keywords: [AI, artificial intelligence, LLM, foundation model, GPT, Claude, Gemini]
+  - name: AI编程
+    keywords: [AI coding, code generation, copilot, cursor, codex, code assistant, AI IDE]
+  - name: Agent
+    keywords: [agent, autonomous agent, tool use, ReAct, function calling]
+  - name: MultiAgent
+    keywords: [multi-agent, multiagent, agent collaboration, agent orchestration]
+  - name: AgentTeam
+    keywords: [agent team, swarm, crew, role-based agent, AutoGen, CrewAI]
+  - name: VibeCode
+    keywords: [vibe coding, vibe code, AI-native development, prompt-driven coding]
+  - name: Harness
+    keywords: [agent harness, claude code, cline, aider, agentic harness, coding harness]
+  - name: 软件工程
+    keywords: [software engineering, SWE, code review, refactoring, testing, CI/CD, devex]
+  - name: 大数据
+    keywords: [big data, data engineering, data lakehouse, spark, flink, kafka, iceberg]
+  - name: 云化
+    keywords: [cloud native, cloud migration, serverless, multi-cloud, kubernetes]
+  - name: 容器化
+    keywords: [container, docker, kubernetes, k8s, OCI, podman, containerd]
+  - name: 函数式编程
+    keywords: [functional programming, haskell, scala, ocaml, fp, monad, immutability]
+  - name: eBPF
+    keywords: [ebpf, eBPF, bpf, XDP, cilium, bcc, bpftrace, kernel tracing, observability, tetragon]
+
+# 信息源开关与参数
+sources:
+  github_trending:
+    enabled: true
+    languages: ["", python, rust, go, typescript]   # "" = all languages
+    since: daily                                    # daily | weekly | monthly
+  github_rising:
+    enabled: true
+    days: 7
+    min_stars: 100
+    max_results: 50
+  arxiv:
+    enabled: true
+    categories: [cs.AI, cs.CL, cs.LG, cs.SE, cs.MA, cs.DC, cs.PL, cs.OS, cs.PF, cs.FL]
+    max_per_category: 30
+    days: 7
+  hackernews:
+    enabled: true
+    min_points: 150
+    days: 2
+    max_results: 60
+  huggingface_papers:
+    enabled: true
+    max_results: 30
+    # 国内访问 huggingface.co 被 DNS 污染，走本地代理直连官方域名
+    base_url: https://huggingface.co
+    proxy: ${HTTPS_PROXY}              # 来自环境变量；未设置则为空，等价于不走代理
+  huggingface_blog:
+    enabled: true
+    feed_url: https://huggingface.co/blog/feed.xml
+    proxy: ${HTTPS_PROXY}              # 来自环境变量；未设置则为空，等价于不走代理
+    max_results: 15
+    days: 14
+  qbitai:
+    enabled: true
+    max_results: 20
+    days: 2
+  anthropic:
+    enabled: true
+    sections: [news, research, engineering]
+    max_results: 15
+    days: 14
+  openai:
+    enabled: true
+    sections: [engineering, research]   # 仅这两个 section 的 sitemap lastmod 是真实发布/更新时间
+    max_results: 15
+    days: 14
+  google_research:
+    enabled: true
+    # 旧地址 ai.googleblog.com 已 301 跳到 research.google/blog
+    rss_url: https://research.google/blog/rss/
+    proxy: ${HTTPS_PROXY}              # 来自环境变量；未设置则为空，等价于不走代理
+    max_results: 15
+    days: 14
+  deepmind:
+    enabled: true
+    # www.deepmind.com 302 跳到 deepmind.google，直接用规范域名
+    rss_url: https://deepmind.google/blog/rss.xml
+    proxy: ${HTTPS_PROXY}              # 来自环境变量；未设置则为空，等价于不走代理
+    max_results: 15
+    days: 14
+  meta_ai:
+    enabled: true
+    # ai.facebook.com/blog 301 跳到 ai.meta.com/blog/，直接用规范域名
+    list_url: https://ai.meta.com/blog/
+    proxy: ${HTTPS_PROXY}              # 来自环境变量；未设置则为空，等价于不走代理
+    max_results: 15
+    days: 30                            # Meta 发布节奏比 Google/DeepMind 慢，窗口放宽
+
+# LLM 过滤与摘要
+llm:
+  base_url: https://api.deepseek.com
+  model: deepseek-v4-pro
+  min_score: 6           # 0-10，<min_score 的条目丢弃
+  max_per_source: 8      # 每个 source 最多保留几条进邮件
+  summary_lang: zh       # 摘要语言
+
+# 邮件
+email:
+  smtp_host: smtp.163.com
+  smtp_port: 465
+  subject_prefix: "[Explorer] 每日订阅"
+
+# 持久化（SQLite 去重）
+storage:
+  db_path: data/seen.db
+  retention_days: 30
