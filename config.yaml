@@ -31,7 +31,7 @@ topics:
 sources:
   github_trending:
     enabled: true
-    languages: ["", python, rust, go, typescript]   # "" = all languages
+    languages: ["", python, rust, go, typescript, java, scala, c, cpp, haskell]   # "" = all languages
     since: daily                                    # daily | weekly | monthly
   github_rising:
     enabled: true
