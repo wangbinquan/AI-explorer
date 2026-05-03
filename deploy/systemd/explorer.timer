@@ -1,9 +1,9 @@
 [Unit]
-Description=Run Explorer daily at 07:00
+Description=Run Explorer daily at 05:00
 
 [Timer]
-# 每天 07:00 触发；改时间就改这里
-OnCalendar=*-*-* 07:00:00
+# 每天 05:00 触发；改时间就改这里
+OnCalendar=*-*-* 05:00:00
 # 机器关机错过任务时，开机后立即补跑一次
 Persistent=true
 Unit=explorer.service

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project purpose
 
-Daily personal "research feed" agent. Each morning at 07:00 (configurable via `launchd`), it:
+Daily personal "research feed" agent. Each morning at 05:00 (configurable via `launchd`), it:
 
 1. Fetches new items from several information sources (GitHub Trending / Rising, arXiv, Hacker News, HuggingFace daily papers).
 2. De-duplicates against previously sent items (SQLite at `data/seen.db`).
@@ -67,7 +67,7 @@ The plist hardcodes an absolute Python path under the project's `.venv` (e.g. `/
 Files live in `deploy/systemd/`:
 
 - `explorer.service` — `Type=oneshot`，跑一次 `python -m src.main` 就退出
-- `explorer.timer` — `OnCalendar=*-*-* 07:00:00`，每天 07:00 触发，`Persistent=true` 保证关机错过会补跑
+- `explorer.timer` — `OnCalendar=*-*-* 05:00:00`，每天 05:00 触发，`Persistent=true` 保证关机错过会补跑
 - `deploy/install.sh` — 一键安装脚本（创建 `explorer` 用户、建 venv、装依赖、安装并启用 timer）
 
 部署步骤（假定项目放在 `/opt/explorer`）：
