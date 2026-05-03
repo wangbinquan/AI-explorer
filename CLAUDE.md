@@ -60,7 +60,7 @@ launchctl start com.explorer.daily
 tail -f logs/explorer.out.log logs/explorer.err.log
 ```
 
-The plist hardcodes the absolute Python path `/Users/wangbinquan/Documents/proj/explorer/.venv/bin/python` — if the venv path changes, update the plist and reload.
+The plist hardcodes an absolute Python path under the project's `.venv` (e.g. `/path/to/explorer/.venv/bin/python`) plus the matching `WorkingDirectory` and log paths — update all of them to your local checkout before `launchctl load`, and reload after any venv path change.
 
 ## Scheduling on Linux server (systemd)
 
